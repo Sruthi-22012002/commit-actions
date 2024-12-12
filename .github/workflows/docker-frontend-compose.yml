@@ -1,4 +1,4 @@
-name: Run Frontend Image
+name: Run Frontend dockerhub Image
 
 on:
   push:

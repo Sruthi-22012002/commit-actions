@@ -1,4 +1,4 @@
-name: Run Frontend image
+name: Run Frontend Image
 
 on:
   push:
@@ -37,6 +37,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend-reactapp:latest
 
-     - name: Run Docker Container
-       run: |
+      - name: Run Docker Container
+        run: |
           docker run -d -p 3000:3000 --name frontend-reactapp ${{ secrets.DOCKERHUB_USERNAME }}/frontend-reactapp:latest
+

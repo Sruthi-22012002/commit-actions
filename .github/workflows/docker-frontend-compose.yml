@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Run Frontend image
 
 on:
   push:
@@ -35,5 +35,5 @@ jobs:
           context: ./react-hooks-frontend
           file: ./react-hooks-frontend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-reactapp:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend-reactapp:latest
 

@@ -47,7 +47,7 @@ jobs:
       # Step 5: Build Docker image
       - name: Build Docker Image
         run: |
-          docker build -t springboot-backend:latest .
+          docker build -t backend-springboot:latest .
 
       # Step 6: Push Docker image to Docker Hub (or another container registry)
       - name: Log in to Docker Hub

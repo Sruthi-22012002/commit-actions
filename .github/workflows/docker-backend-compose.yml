@@ -35,22 +35,33 @@ jobs:
             docker exec mysql-container mysqladmin ping -h "127.0.0.1" --password=0612 && break || sleep 2;
           done
 
-      # Step 4: Build the Spring Boot application
+      # Step 4: Inject application.yml
+      - name: Inject application.yml
+        run: |
+          echo "spring:" > ./springboot-backend/src/main/resources/application.yml
+          echo "  datasource:" >> ./springboot-backend/src/main/resources/application.yml
+          echo "    url: jdbc:mysql://localhost:3306/employees?useSSL=false" >> ./springboot-backend/src/main/resources/application.yml
+          echo "    username: root" >> ./springboot-backend/src/main/resources/application.yml
+          echo "    password: 0612" >> ./springboot-backend/src/main/resources/application.yml
+          echo "  jpa:" >> ./springboot-backend/src/main/resources/application.yml
+          echo "    properties:" >> ./springboot-backend/src/main/resources/application.yml
+          echo "      hibernate:" >> ./springboot-backend/src/main/resources/application.yml
+          echo "        dialect: org.hibernate.dialect.MySQLDialect" >> ./springboot-backend/src/main/resources/application.yml
+          echo "    hibernate:" >> ./springboot-backend/src/main/resources/application.yml
+          echo "      ddl-auto: update" >> ./springboot-backend/src/main/resources/application.yml
+
+      # Step 5: Build the Spring Boot application
       - name: Build with Maven
-        run: mvn clean
+        run: mvn clean install -DskipTests
         working-directory: ./springboot-backend
 
-      - name: Build with Maven
-        run: mvn install -DskipTests
-        working-directory: ./springboot-backend
-
-      # Step 5: Build Docker image
+      # Step 6: Build Docker image
       - name: Build Docker Image
         run: |
           docker build -t backend-springboot:latest .
         working-directory: ./springboot-backend
 
-      # Step 6: Push Docker image to Docker Hub
+      # Step 7: Push Docker image to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -61,3 +72,4 @@ jobs:
         run: |
           docker tag backend-springboot:latest sruthivg22012002/backend-springboot:latest
           docker push sruthivg22012002/backend-springboot:latest
+

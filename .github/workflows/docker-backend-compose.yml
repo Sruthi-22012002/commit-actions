@@ -21,12 +21,25 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      # Step 3: Build the Spring Boot application
+      # Step 3: Start MySQL container
+      - name: Start MySQL
+        run: |
+          docker run -d --name mysql-container \
+            -e MYSQL_ROOT_PASSWORD=0612 \ 
+            -e MYSQL_DATABASE=employees \ 
+            -e MYSQL_USER=root \ 
+            -e MYSQL_PASSWORD=0612 \ 
+            -p 3306:3306 mysql:8.0
+          # Wait for MySQL to initialize
+          for i in {1..30}; do
+            docker exec mysql-container mysqladmin ping -h "127.0.0.1" --password=root && break || sleep 2;
+          done
+
+      # Step 4: Build the Spring Boot application
       - name: Build with Maven
         run: mvn clean
         working-directory: springboot-backend
 
-     # Step 4: Build the Spring Boot application
       - name: Build with Maven
         run: mvn install
         working-directory: springboot-backend

@@ -35,20 +35,11 @@ jobs:
             docker exec mysql-container mysqladmin ping -h "127.0.0.1" --password=0612 && break || sleep 2;
           done
 
-      # Step 4: Inject application.yml
-      - name: Inject application.yml
+      # Step 4: Inject application.properties
+      - name: Inject application.properties
         run: |
-          echo "spring:" > ./springboot-backend/src/main/resources/application.yml
-          echo "  datasource:" >> ./springboot-backend/src/main/resources/application.yml
-          echo "    url: jdbc:mysql://localhost:3306/employees?useSSL=false" >> ./springboot-backend/src/main/resources/application.yml
-          echo "    username: root" >> ./springboot-backend/src/main/resources/application.yml
-          echo "    password: 0612" >> ./springboot-backend/src/main/resources/application.yml
-          echo "  jpa:" >> ./springboot-backend/src/main/resources/application.yml
-          echo "    properties:" >> ./springboot-backend/src/main/resources/application.yml
-          echo "      hibernate:" >> ./springboot-backend/src/main/resources/application.yml
-          echo "        dialect: org.hibernate.dialect.MySQLDialect" >> ./springboot-backend/src/main/resources/application.yml
-          echo "    hibernate:" >> ./springboot-backend/src/main/resources/application.yml
-          echo "      ddl-auto: update" >> ./springboot-backend/src/main/resources/application.yml
+          bash ./inject-application-properties.yml
+        working-directory: ./springboot-backend
 
       # Step 5: Build the Spring Boot application
       - name: Build with Maven
